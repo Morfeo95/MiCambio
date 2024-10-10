@@ -5,18 +5,14 @@ public class Moneda {
     private double valor;
     private String fechaDeLaUltimaActualizacion;
     private double valorEur;
-
+    //Las monedas so creadas apartir de Monedaexapi que extrae los datos de la api
     public Moneda(MonedaExApi monedaExApi) {
         this.valor = monedaExApi.getUsd();
         this.fechaDeLaUltimaActualizacion = monedaExApi.time_last_update_utc();
         this.tipo = monedaExApi.base_code();
         this.valorEur = monedaExApi.getEur();
     }
-
-    public String getTipo() {
-        return tipo;
-    }
-
+    //Getters y setters
     public double getValor() {
         return valor;
     }
@@ -24,11 +20,7 @@ public class Moneda {
     public double getValorEur() {
         return valorEur;
     }
-
-    public String getFechaDeLaUltimaActualizacion() {
-        return fechaDeLaUltimaActualizacion;
-    }
-
+    //toString Modificado.
     @Override
     public String toString() {
         return "tipo: " + tipo +

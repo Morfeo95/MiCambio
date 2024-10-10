@@ -1,13 +1,43 @@
 package com.francisco.micambio.principal;
 
 import com.francisco.micambio.herramientas.Convertir;
+import com.francisco.micambio.herramientas.Historial;
+
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class Menu implements Convertir {
+    //Asignando variables
+    private boolean deberiaDetenerme;
+    private String moneda;
+    private String codigo;
+    private LocalDateTime fecha;
+    private String salida;
+    private  String referecia;
+    //Getters y setters
+    public String getReferecia() {
+        return referecia;
+    }
 
-    boolean deberiaDetenerme;
+    public boolean isDeberiaDetenerme() {
+        return deberiaDetenerme;
+    }
 
+    public String getMoneda() {
+        return moneda;
+    }
+
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public String getSalida() {
+        return salida;
+    }
+    //Creación del menú
     void creaMenu(){
+        this.fecha = LocalDateTime.now();
         System.out.println(
                 """
                         *******************************************
@@ -17,15 +47,21 @@ public class Menu implements Convertir {
                         3) Peso Argentino.
                         4) Réal Brasileño.
                         5) Euro.
+                        6) Historial.
                         9) Salir.
                         *******************************************
                         """
         );
+        //Registrando opciones.
         Scanner opcionMenu = new Scanner(System.in);
         int opcion = opcionMenu.nextInt();
         opcionMenu.nextLine();
         switch (opcion){
+            //opcion Pesos Méxicanos
             case 1:
+                this.moneda = "Pesos Méxicanos";
+                this.codigo= "MXN";
+                this.referecia="Dólares.";
                 System.out.println("""
                         *******************************************
                         Ingresa la opción deseada:
@@ -35,30 +71,21 @@ public class Menu implements Convertir {
                         """);
                 opcion = opcionMenu.nextInt();
                 opcionMenu.nextLine();
-                if (opcion == 1){
-                    System.out.println("Ingrese la cantidad a convertir.");
-                    double cantidad = opcionMenu.nextDouble();
-                    opcionMenu.nextLine();
-                    System.out.println(cantidad+" pesos Méxicanos son: "+convierte(cantidad,"MXN", false)+" Dolares");
-                    System.out.println("Preciona ENTER para continuar...");
-                    opcionMenu.nextLine();
-                } else if (opcion == 2) {
-                    System.out.println("Ingrese la cantidad a convertir.");
-                    double cantidad = opcionMenu.nextDouble();
-                    opcionMenu.nextLine();
-                    System.out.println(cantidad+" pesos Méxicanos son: "+convierteEur(cantidad,"MXN", false)+" Euros");
-                    System.out.println("Preciona ENTER para continuar...");
-                    opcionMenu.nextLine();
-                }
-                else if (opcion==9){
-                    break;
-                }else {
-                    System.out.println("Opcio inválida.");
-                    System.out.println("Preciona ENTER para continuar...");
-                    opcionMenu.nextLine();
-                }
+               if (opcion==9){
+                   break;
+               }else {
+                   if (opcion==2){
+                       this.referecia="Euros";
+                   }
+                   salida = imprime(opcion,moneda,codigo);
+                   System.out.println(salida);
+                   System.out.println("Preciona ENTER para continuar...");
+                   opcionMenu.nextLine();
+               }
                 break;
+            //Opcion Dolares
             case 2:
+                this.moneda = " Dólares";
                 System.out.println("""
                         *******************************************
                         Ingresa la opción deseada:
@@ -69,49 +96,55 @@ public class Menu implements Convertir {
                         9) Salir.
                         """);
                 opcion = opcionMenu.nextInt();
+                opcionMenu.nextLine();
+                //Cada opción cambia o asigna el valor de las constates
                 switch (opcion){
                     case 1:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        double cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Dólares son: "+convierte(cantidad,"MXN",true)+" Pesos Méxicanos.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.referecia=" Pesos Méxicanos.";
+                        this.codigo="MXN";
+                        salida = imprimeDolares(referecia, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar.");
                         opcionMenu.nextLine();
                         break;
                     case 2:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Dólares son: "+convierte(cantidad,"ARS",true)+" Pesos Argentinos.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.referecia=" Pesos Argentinos.";
+                        this.codigo="ARS";
+                        salida = imprimeDolares(referecia, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar.");
                         opcionMenu.nextLine();
                         break;
                     case 3:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Dólares son: "+convierte(cantidad,"BRL",true)+" Réales Brasileños.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.referecia=" Réales Brasileños.";
+                        this.codigo="BRL";
+                        salida = imprimeDolares(referecia, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar.");
                         opcionMenu.nextLine();
                         break;
                     case 4:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Dólares son: "+convierte(cantidad,"EUR",true)+" Euros.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.referecia=" Euros.";
+                        this.codigo="EUR";
+                        salida = imprimeDolares(referecia, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar.");
                         opcionMenu.nextLine();
                         break;
                     case 9:
                         break;
                     default:
-                        System.out.println("Opcin inválida.");
+                        System.out.println("Opcion inválida.");
                         System.out.println("Preciona ENTER para continuar...");
                         opcionMenu.nextLine();
                         break;
                 }
                 break;
+            //Opcion Pesos Argentinos
             case 3:
+                this.moneda= " Peso Argentino.";
+                this.referecia="Dólares.";
+                this.codigo="ARS";
                 System.out.println("""
                         *******************************************
                         Ingresa la opción deseada:
@@ -121,31 +154,24 @@ public class Menu implements Convertir {
                         """);
 
                 opcion = opcionMenu.nextInt();
-                if (opcion == 1){
-                    System.out.println("Ingrese la cantidad a convertir.");
-                    double cantidad = opcionMenu.nextDouble();
-                    opcionMenu.nextLine();
-                    System.out.println(cantidad+" pesos Argentinos son: "+convierte(cantidad,"ARS", false)+" Dolares");
-                    System.out.println("Preciona ENTER para continuar...");
-                    opcionMenu.nextLine();
-                } else if (opcion == 2) {
-                    System.out.println("Ingrese la cantidad a convertir.");
-                    double cantidad = opcionMenu.nextDouble();
-                    opcionMenu.nextLine();
-                    System.out.println(cantidad+" pesos Argentinos son: "+convierteEur(cantidad,"ARS", false)+" Euros");
-                    System.out.println("Preciona ENTER para continuar...");
-                    opcionMenu.nextLine();
-                }
-                else if (opcion==9){
+                opcionMenu.nextLine();
+                if (opcion==9){
                     break;
                 }else {
-                    System.out.println("Opcio inválida.");
+                    if (opcion==2){
+                        this.referecia="Euros";
+                    }
+                    salida = imprime(opcion,moneda,codigo);
+                    System.out.println(salida);
                     System.out.println("Preciona ENTER para continuar...");
                     opcionMenu.nextLine();
                 }
                 break;
-
+            //Opción Réales Brazileños.
             case 4:
+                this.moneda=" Réales Brasileños";
+                this.referecia="Dólares.";
+                this.codigo="BRL";
                 System.out.println("""
                         *******************************************
                         Ingresa la opción deseada:
@@ -155,30 +181,22 @@ public class Menu implements Convertir {
                         """);
 
                 opcion = opcionMenu.nextInt();
-                if (opcion == 1){
-                    System.out.println("Ingrese la cantidad a convertir.");
-                    double cantidad = opcionMenu.nextDouble();
-                    opcionMenu.nextLine();
-                    System.out.println(cantidad+" Réales Brasileños son: "+convierte(cantidad,"BRL", false)+" Dolares");
-                    System.out.println("Preciona ENTER para continuar...");
-                    opcionMenu.nextLine();
-                } else if (opcion == 2) {
-                    System.out.println("Ingrese la cantidad a convertir.");
-                    double cantidad = opcionMenu.nextDouble();
-                    opcionMenu.nextLine();
-                    System.out.println(cantidad+" Réales Brasileños son: "+convierteEur(cantidad,"BRL", false)+" Euros");
-                    System.out.println("Preciona ENTER para continuar...");
-                    opcionMenu.nextLine();
-                }
-                else if (opcion==9){
+                opcionMenu.nextLine();
+                if (opcion==9){
                     break;
                 }else {
-                    System.out.println("Opcio inválida.");
-                    System.out.println("Preciona ENTER para continuar...");
+                    if (opcion==2){
+                        this.referecia="Euros";
+                    }
+                    salida = imprime(opcion,moneda,codigo);
+                    System.out.println(salida);
+                    System.out.println("Preciona ENTER para cóntinuar...");
                     opcionMenu.nextLine();
                 }
-                break;
+                    break;
+            //Opcion Euros
             case 5:
+                this.referecia="Euros";
                 System.out.println("""
                         *******************************************
                         Ingresa la opción deseada:
@@ -189,59 +207,68 @@ public class Menu implements Convertir {
                         9) Salir.
                         """);
                 opcion = opcionMenu.nextInt();
+                opcionMenu.nextLine();
+                //Misma funcionalidad que en Dólares.
                 switch (opcion){
                     case 1:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        double cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Euros son: "+convierteEur(cantidad,"MXN",true)+" Pesos Méxicanos.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.moneda=" Peso Méxicano";
+                        this.codigo="MXN";
+                        salida = imprimeEuros(moneda, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar...");
                         opcionMenu.nextLine();
                         break;
                     case 2:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Euros son: "+convierteEur(cantidad,"ARS",true)+" Pesos Argentinos.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.moneda=" Peso Argentino";
+                        this.codigo="ARS";
+                        salida = imprimeEuros(moneda, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar...");
                         opcionMenu.nextLine();
                         break;
                     case 3:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Euros son: "+convierteEur(cantidad,"BRL",true)+" Réales Brasileños.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.moneda=" Réal Brasileño.";
+                        this.codigo="BRL";
+                        salida = imprimeEuros(moneda, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar...");
                         opcionMenu.nextLine();
                         break;
                     case 4:
-                        System.out.println("Ingrese la cantidad a convertir.");
-                        cantidad = opcionMenu.nextDouble();
-                        opcionMenu.nextLine();
-                        System.out.println(cantidad+" Euros son: "+convierteEur(cantidad,"USD",true)+" Euros.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        this.moneda=" Dólares";
+                        this.codigo="USD";
+                        salida = imprimeEuros(moneda, codigo);
+                        System.out.println(salida);
+                        System.out.println("Preciona ENTER para cóntinuar...");
                         opcionMenu.nextLine();
                         break;
                     case 9:
                         break;
                     default:
                         System.out.println("Opcin inválida.");
-                        System.out.println("Preciona ENTER para continuar...");
+                        System.out.println("Preciona ENTER para cóntinuar...");
                         opcionMenu.nextLine();
                         break;
                 }
                 break;
+            //Opción ver el historial.
+            case 6:
+                Historial.muestra();
+                this.deberiaDetenerme=true;
+                break;
+            //Opcion Salir
             case 9:
                 this.deberiaDetenerme=true;
                 break;
-
+            //Opciones equivocas
             default:
                 System.out.println("Opción inválida");
-                System.out.println("Preciona ENTER para continuar...");
+                System.out.println("Preciona ENTER para cóntinuar...");
                 opcionMenu.nextLine();
                 break;
         }
 
     }
+
 
 }

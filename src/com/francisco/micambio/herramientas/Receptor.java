@@ -10,7 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class Receptor {
-
+    //Creación del record de la api
     public MonedaExApi crea(String moneda){
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -22,7 +22,8 @@ public class Receptor {
             response=client
                 .send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException  e) {
-            throw new RuntimeException(e);
+            //Error en caso de fallar api
+            System.out.println("Error de conexión");
         }
         return new Gson().fromJson(response.body(), MonedaExApi.class);
 
